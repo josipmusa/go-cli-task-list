@@ -3,7 +3,7 @@ package services
 import (
 	"encoding/json"
 	"fmt"
-	"go-cli-task-list/internal/models"
+	"go-cli-task-list/models"
 	"os"
 	"time"
 )
