@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"go-cli-task-list/models"
 	"os"
+	"strings"
 	"time"
 )
 
@@ -76,6 +77,24 @@ func (service *NoteService) DeleteNote(id int) error {
 		}
 	}
 	return fmt.Errorf("note with id %d not found", id)
+}
+
+func (service *NoteService) SearchNote(keyword string) ([]models.Note, error) {
+	var matchingNotes []models.Note
+	notes, err := service.LoadNotes()
+	if err != nil {
+		return matchingNotes, err
+	}
+
+	for _, note := range notes {
+		if strings.Contains(note.Title, keyword) {
+			matchingNotes = append(matchingNotes, note)
+		} else if strings.Contains(note.Body, keyword) {
+			matchingNotes = append(matchingNotes, note)
+		}
+	}
+
+	return matchingNotes, nil
 }
 
 func (service *NoteService) writeToFile(notes []models.Note) error {

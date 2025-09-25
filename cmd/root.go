@@ -10,5 +10,5 @@ var RootCmd = &cobra.Command{
 }
 
 func init() {
-	RootCmd.AddCommand(AddNoteCmd, ReadNotesCmd, ViewNoteCmd, DeleteNoteCmd)
+	RootCmd.AddCommand(AddNoteCmd, ReadNotesCmd, ViewNoteCmd, DeleteNoteCmd, SearchCmd)
 }
