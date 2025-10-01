@@ -1,7 +1,6 @@
 package cmd
 
 import (
-	"encoding/json"
 	"fmt"
 	"go-cli-task-list/services"
 
@@ -22,12 +21,9 @@ var ReadNotesCmd = &cobra.Command{
 			fmt.Println("No notes found")
 		} else {
 			fmt.Println("Notes:")
-			for _, note := range notes {
-				data, err := json.MarshalIndent(note, "", "  ")
-				if err != nil {
-					return err
-				}
-				fmt.Println(string(data))
+			err := noteService.PrintNotes(notes)
+			if err != nil {
+				return err
 			}
 		}
 		return nil

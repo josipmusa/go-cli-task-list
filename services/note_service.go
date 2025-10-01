@@ -6,7 +6,10 @@ import (
 	"go-cli-task-list/models"
 	"os"
 	"strings"
+	"text/tabwriter"
 	"time"
+
+	"github.com/fatih/color"
 )
 
 type NoteService struct{}
@@ -95,6 +98,42 @@ func (service *NoteService) SearchNote(keyword string) ([]models.Note, error) {
 	}
 
 	return matchingNotes, nil
+}
+
+func (service *NoteService) PrintNotes(notes []models.Note) error {
+	// Create tabwriter
+	w := tabwriter.NewWriter(os.Stdout, 0, 0, 2, ' ', 0)
+
+	// Column colors
+	green := color.New(color.FgGreen).SprintFunc()
+	blue := color.New(color.FgBlue).SprintFunc()
+	yellow := color.New(color.FgYellow).SprintFunc()
+	magenta := color.New(color.FgMagenta).SprintFunc()
+	cyan := color.New(color.FgCyan).SprintFunc()
+
+	_, err := fmt.Fprintln(w, "ID\tTitle\tBody\tTags\tCreatedAt")
+	if err != nil {
+		return err
+	} // plain header
+
+	for _, note := range notes {
+		_, err := fmt.Fprintf(w, "%s\t%s\t%s\t%s\t%s\n",
+			green(note.ID),
+			blue(note.Title),
+			yellow(note.Body),
+			magenta(strings.Join(note.Tags, ",")),
+			cyan(note.CreatedAt.Format(time.RFC3339)),
+		)
+		if err != nil {
+			return err
+		}
+	}
+
+	// Flush writer
+	if err := w.Flush(); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (service *NoteService) writeToFile(notes []models.Note) error {

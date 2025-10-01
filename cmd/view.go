@@ -1,8 +1,7 @@
 package cmd
 
 import (
-	"encoding/json"
-	"fmt"
+	"go-cli-task-list/models"
 	"go-cli-task-list/services"
 
 	"github.com/spf13/cobra"
@@ -17,11 +16,11 @@ var ViewNoteCmd = &cobra.Command{
 		if err != nil {
 			return err
 		}
-		data, err := json.MarshalIndent(note, "", "  ")
+
+		err = noteService.PrintNotes([]models.Note{note})
 		if err != nil {
 			return err
 		}
-		fmt.Println(string(data))
 		return nil
 	},
 }
